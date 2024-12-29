@@ -29,14 +29,14 @@
       </form>
       <router-link to="/signup">Sign up</router-link>
       <v-snackbar
-        :timeout="-1"
-        :value="message.length > 0"
-        @click="closeMessage"
+        v-model="showToast"
+        :timeout="1000"
         absolute
         center
+        rounded="pill"
         color="red"
-        shaped
         top
+        @click="closeMessage"
       >
         {{ message }}
       </v-snackbar>
@@ -50,6 +50,7 @@ export default {
   data(){
     return{
       loading: false,
+      showToast: false,
       message: '',
       signInPayload: {
         username: '',
@@ -68,6 +69,7 @@ export default {
         localStorage.setItem('token', res.token)
         this.$router.push('/')
       } catch(err){ 
+        this.showToast = true
         this.message = err.response.data       
       } finally{
         this.$nuxt.$loading.finish()

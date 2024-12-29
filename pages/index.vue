@@ -11,11 +11,11 @@
     <h1>Uploaded images</h1>
     <ImageTable :user-images="images"/>
     <v-snackbar
-      :timeout="-1"
-      :value="message.length > 0"
+      :timeout="1000"
+      :value="showToast"
       absolute
+      rounded="pill"
       center
-      shaped
       top
       color="green"
     >
@@ -31,6 +31,7 @@ export default {
   data(){
     return {
       message: '',
+      showToast: false,
       newImage: null,
       images: []
     }
@@ -56,8 +57,10 @@ export default {
           token
         }})
         this.images = [res, ...this.images]
+        this.showToast = true
         this.message = 'Image uploaded'
       } catch(err){
+        this.showToast = true
         this.message = err.response.data
       } finally{
         this.newImage = null

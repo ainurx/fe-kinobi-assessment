@@ -34,14 +34,14 @@
           Sign up
         </v-btn>
       </form>
-      <router-link to="/signin">Signin</router-link>
+      <router-link to="/signin">Sign in</router-link>
       <v-snackbar
-        :timeout="-1"
-        :value="message.length > 0"
+        v-model="showToast"
+        :timeout="1000"
         absolute
         color="red"
+        rounded="pill"
         center
-        shaped
         top
       >
         {{ message }}
@@ -56,6 +56,7 @@ export default {
   data(){
     return {
       isLoading: false,
+      showToast: false,
       message: '',
       userPayload: {
         name: '',
@@ -72,6 +73,7 @@ export default {
         localStorage.setItem('token', res.token)
         this.$router.push('/')
       } catch(err){
+        this.showToast = true
         this.message = err.response.data
       } finally {
         this.isLoading = false
