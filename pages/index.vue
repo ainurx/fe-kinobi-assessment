@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-file-input
+      v-model="newImage"
       show-size
       counter
       accept=".jpg, .jpeg, .png"
@@ -8,7 +9,18 @@
       @change="uploadImage"
     ></v-file-input>
     <h1>Uploaded images</h1>
-    <ImageTable :userImages="images"/>
+    <ImageTable :user-images="images"/>
+    <v-snackbar
+      :timeout="-1"
+      :value="message.length > 0"
+      absolute
+      center
+      shaped
+      top
+      color="green"
+    >
+      {{ message }}
+    </v-snackbar>
   </div>
 </template>
 
@@ -18,6 +30,8 @@ export default {
 
   data(){
     return {
+      message: '',
+      newImage: null,
       images: []
     }
   },
@@ -29,6 +43,9 @@ export default {
   methods: {
     async uploadImage(file){
       try{
+        if(!this.newImage){
+          return
+        }
         const token = localStorage.getItem('token')
         const formData = new FormData()
         formData.append('image', file)
@@ -38,10 +55,12 @@ export default {
           'Content-Type': 'multipart/form-data', 
           token
         }})
-        console.log(res)
-        // this.fethImages()
+        this.images = [res, ...this.images]
+        this.message = 'Image uploaded'
       } catch(err){
-        console.log(err)
+        this.message = err.response.data
+      } finally{
+        this.newImage = null
       }
     },
 

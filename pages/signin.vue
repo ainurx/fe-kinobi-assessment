@@ -28,6 +28,18 @@
         </v-btn>
       </form>
       <router-link to="/signup">Sign up</router-link>
+      <v-snackbar
+        :timeout="-1"
+        :value="message.length > 0"
+        @click="closeMessage"
+        absolute
+        center
+        color="red"
+        shaped
+        top
+      >
+        {{ message }}
+      </v-snackbar>
     </div>
 </template>
 
@@ -38,6 +50,7 @@ export default {
   data(){
     return{
       loading: false,
+      message: '',
       signInPayload: {
         username: '',
         password: ''
@@ -51,15 +64,18 @@ export default {
         this.$nuxt.$loading.start()
         
         const res = await this.$axios.$post('/signin', this.signInPayload)
-        console.log(res)
+
         localStorage.setItem('token', res.token)
         this.$router.push('/')
       } catch(err){ 
-        console.log(err)        
+        this.message = err.response.data       
       } finally{
-        // this.loading = false 
         this.$nuxt.$loading.finish()
       }
+    },
+
+    closeMessage(){
+      this.message = ''
     }
   }
 }
