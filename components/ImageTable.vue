@@ -1,57 +1,57 @@
 <template>
   <div>
     <v-simple-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left">
-            ID
-          </th>
-          <th class="text-center">
-            Image
-          </th>
-          <th class="text-center">
-            Action
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="image in images"
-          :key="image.id"
-        >
-          <td>{{ image.id }}</td>
-          <td align="center">
-            <img :src="image.image" :alt="image.image" style="width: 150px;" />
-          </td>
-          <td align="center">
-            <v-btn
-              :loading="loading3"
-              :disabled="loading3"
-              color="primary"
-              class="ma-2 white--text"
-              @click="onDetailClick(image.image)"
-            >
-              Detail
-              <v-icon
-                right
-                dark
+      <template #default>
+        <thead>
+          <tr>
+            <th class="text-left">
+              ID
+            </th>
+            <th class="text-center">
+              Image
+            </th>
+            <th class="text-center">
+              Action
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="image in images"
+            :key="image.id"
+          >
+            <td>{{ image.id }}</td>
+            <td align="center">
+              <img :src="image.image" :alt="image.image" style="width: 150px;" />
+            </td>
+            <td align="center">
+              <v-btn
+                color="primary"
+                class="ma-2 white--text"
+                @click="onDetailClick(image.image)"
               >
-                mdi-eye-outline
-              </v-icon>
-            </v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-simple-table>
-  <v-overlay :value="detailImage.length > 0" @click="()=> detailImage = ''">
-    <img :src="detailImage"/>
-  </v-overlay>
-</div>
-  </template>
+                Detail
+                <v-icon
+                  right
+                  dark
+                >
+                  mdi-eye-outline
+                </v-icon>
+              </v-btn>
+            </td>
+          </tr>
+        </tbody>
+      </template>
+    </v-simple-table>
+    <v-overlay :value="detailImage.length > 0" @click="()=> detailImage = ''">
+      <v-container>
+        <img :src="detailImage"/>
+      </v-container>
+    </v-overlay>
+  </div>
+</template>
   
-  <script>
+<script>
   export default {
     name: 'ImageTable',
     props: ['userImages'], 

@@ -10,6 +10,12 @@
     ></v-file-input>
     <h1>Uploaded images</h1>
     <ImageTable :user-images="images"/>
+    <div class="text-center">
+      <v-pagination
+        v-model="currentPage"
+        :length="totalOfPage"
+      ></v-pagination>
+    </div>
     <v-snackbar
       :timeout="1000"
       :value="showToast"
@@ -27,13 +33,25 @@
 <script>
 export default {
   name: 'IndexPage',
-
   data(){
     return {
       message: '',
       showToast: false,
       newImage: null,
+      currentPage: 1,
+      totalOfPage: 1,
       images: []
+    }
+  },
+  
+  watch: {
+    currentPage() {
+      this.fethImages();
+    },
+    images(newImages){
+      if(newImages.length > 5){
+        this.images = newImages.slice(0, 5)
+      }
     }
   },
 
@@ -70,10 +88,16 @@ export default {
     async fethImages(){
       try{
         const token = localStorage.getItem('token')
-        const res = await this.$axios.$get('/images', { headers: { token }})
+        const res = await this.$axios.$get('/images', { 
+          params: {pageNo: this.currentPage},
+          headers: { token }
+        })
+        
+        this.totalOfPage = Math.ceil(res.count / 5)
         this.images = res.rows
       } catch(err){
-        console.log(err)
+        this.showToast = true
+        this.message = err.response.data
       }
     }
   },
