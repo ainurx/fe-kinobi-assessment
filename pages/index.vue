@@ -79,7 +79,6 @@ export default {
         this.message = 'Image uploaded'
       } catch(err){
         this.showToast = true
-        this.message = err.response.data
       } finally{
         this.newImage = null
       }
@@ -96,6 +95,9 @@ export default {
         this.totalOfPage = Math.ceil(res.count / 5)
         this.images = res.rows
       } catch(err){
+        if(err.response.status === 401){
+          this.$router.push('/signin')
+        }
         this.showToast = true
         this.message = err.response.data
       }
