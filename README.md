@@ -2,6 +2,8 @@
 
 ## Build Setup
 
+Ensure node js version are 16.10
+
 ```bash
 # Create .env file on root dir of project 
 Define API_URL and value equal to http://localhost:5050/api 
